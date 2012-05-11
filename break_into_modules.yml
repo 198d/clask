@@ -1,4 +1,4 @@
 description: clask/__init__.py needs to be broken down into modules leaving, probably,
   only the main function behind.
-state: unstarted
+state: started
 title: Break clask/__init__.py into Modules
