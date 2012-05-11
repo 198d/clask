@@ -58,6 +58,18 @@ for the modification:
 Change state: <previous_state> -> <new_state>
 ```
 
+### Starting a task
+
+```
+$ clask finish <slug>
+```
+
+This is a special case of the ```move``` command. It will change the
+state of the task ```<slug>``` to ```started```.
+
+The commit message attached to the commit created by this command will
+be the same as for the ```move``` command.
+
 ### Editing a task
 
 ```

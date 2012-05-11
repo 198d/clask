@@ -70,6 +70,11 @@ def finish(args):
     move(args, finish=True)
 
 
+def start(args):
+    args.state = 'started'
+    move(args)
+
+
 def _get_input_from_editor(default=None):
     editor = os.environ.get('EDITOR', 'vim')
     with tempfile.NamedTemporaryFile(suffix=".yml", delete=False) as temp_file:
@@ -173,6 +178,12 @@ def main():
     move_parser.add_argument('slug', help='slug of the task to move')
     move_parser.add_argument('state', help='new state of the task')
     move_parser.set_defaults(func=move)
+
+    start_parser = subparsers.add_parser('start',
+        help='Start a task in the current clask project',
+        description='Start a task in the current clask project.')
+    start_parser.add_argument('slug', help='slug of the task to move')
+    start_parser.set_defaults(func=start)
 
     edit_parser = subparsers.add_parser('edit',
         help='Edit a task in the current clask project',
