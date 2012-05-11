@@ -20,14 +20,15 @@ _repo = Repo('.')
 _config = _repo.get_config_stack()
 
 
-def init():
+def init(args):
     try:
         _repo.refs['refs/heads/clask']
     except KeyError:
         _commit({'.gitkeep': ''}, 'Initialize clask')
 
 
-def add(slug):
+def add(args):
+    slug = args.slug
     task_template = "title: {0}\ndescription: [insert description]\n" \
         "state: unstarted\n"
     task = _load_task_from_string(
@@ -38,7 +39,8 @@ def add(slug):
         'Create task: {0}'.format(slug))
 
 
-def move(slug, new_state, finish=False):
+def move(args, finish=False):
+    slug, new_state = (args.slug, args.state)
     tree_dict = dict()
     tree_entry = _task_filename(slug)
 
@@ -54,7 +56,8 @@ def move(slug, new_state, finish=False):
     _commit(tree_dict, "Change state: {0} -> {1}".format(old_state, new_state))
 
 
-def edit(slug):
+def edit(args):
+    slug = args.slug
     blob = _get_blob(slug)
     task = _load_task_from_string(_get_input_from_editor(blob.data))
     tree_entry = _task_filename(slug)
@@ -62,8 +65,9 @@ def edit(slug):
     _commit({tree_entry: _dump_task(task)}, "Update task: {0}".format(slug))
 
 
-def finish(slug):
-    move(slug, 'finished', finish=True)
+def finish(args):
+    args.state = 'finished'
+    move(args, finish=True)
 
 
 def _get_input_from_editor(default=None):
@@ -148,18 +152,42 @@ def _dump_task(task):
 
 
 def main():
-    commands = ['init', 'add', 'move', 'edit', 'finish']
     parser = ArgumentParser(
-        description="A command-line task manager powered by git.",
-        epilog="Available commands: {0}".format(', '.join(commands)))
-    parser.add_argument('command')
-    parser.add_argument('args', nargs='*')
+        description="A command-line task manager powered by git.")
+    subparsers = parser.add_subparsers(title='Commands')
+
+    init_parser = subparsers.add_parser('init',
+        help='Initialize a clask project',
+        description='Initialize a clask project.')
+    init_parser.set_defaults(func=init)
+
+    add_parser = subparsers.add_parser('add',
+        help='Add a task to the current clask project',
+        description='Add a task to the current clask project.')
+    add_parser.add_argument('slug', help='slug of the task to add')
+    add_parser.set_defaults(func=add)
+
+    move_parser = subparsers.add_parser('move',
+        help='Move a task in the current clask project to a new state',
+        description='Move a task in the current clask project to a new state.')
+    move_parser.add_argument('slug', help='slug of the task to move')
+    move_parser.add_argument('state', help='new state of the task')
+    move_parser.set_defaults(func=move)
+
+    edit_parser = subparsers.add_parser('edit',
+        help='Edit a task in the current clask project',
+        description='Edit a task in the current clask project.')
+    edit_parser.add_argument('slug', help='slug of the task to edit')
+    edit_parser.set_defaults(func=edit)
+
+    finish_parser = subparsers.add_parser('finish',
+        help='Finish a task in the current clask project',
+        description='Finish a task in the current clask project.')
+    finish_parser.add_argument('slug', help='slug of the task to move')
+    finish_parser.set_defaults(func=finish)
 
     args = parser.parse_args()
-    if args.command in commands:
-        globals()[args.command](*args.args)
-    else:
-        parser.print_help()
+    args.func(args)
 
 
 if __name__ == '__main__':
