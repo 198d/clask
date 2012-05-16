@@ -1,0 +1,8 @@
+!!python/object/new:clask.task.Task
+dictitems:
+  description: Add list command which should allow displaying all tasks in various
+    ways.
+  state: finished
+  title: List Command
+state:
+  slug: list_command
