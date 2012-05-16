@@ -2,7 +2,7 @@
 dictitems:
   description: Add show command which allows for viewing of individual tasks in various
     ways.
-  state: started
+  state: finished
   title: Show Command
 state:
   slug: show_command
