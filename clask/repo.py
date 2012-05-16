@@ -31,7 +31,7 @@ def put(slug, data, message=None, finish=False):
         tree_dict[_tree_entry(slug, True)] = data
         tree_dict[_tree_entry(slug)] = None
     else:
-        tree_dict[_tree_entry(slug)] = data
+        tree_dict[_current_tree_entry(slug)] = data
 
     _commit(tree_dict, message)
 
