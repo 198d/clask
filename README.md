@@ -144,3 +144,27 @@ task file to ```.<slug>.yml```.
 
 The commit message attached to the commit created by this command will
 be the same as for the ```move``` command.
+
+### Listing tasks
+
+```
+usage: clask list [-h] [--states STATE [STATE ...]] [--finished]
+                  [--format {long,short}]
+
+List tasks in the current clask project.
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --states STATE [STATE ...]
+                        set of states to list
+  --finished            include tasks that have been finished
+  --format {long,short}
+                        format to display listed tasks (defualt: short)
+```
+
+This will list active tasks in the current clask project. The list can
+be altered  by setting ```--states``` and ```--finished``` options.
+The ```--states``` option allows filtering the list by a set of
+states. By default, finished tasks are not displayed. The
+```--finished``` option will include those tasks. To see only finished
+tasks, use the ```---states``` option.

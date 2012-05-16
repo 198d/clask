@@ -3,6 +3,9 @@ import subprocess
 import tempfile
 from argparse import ArgumentParser
 
+from clint.textui import puts, indent, columns
+from clint.textui.colored import green, yellow, red
+
 from clask import repo, task
 
 
@@ -14,7 +17,8 @@ def add(args):
     slug = args.slug
     task_template = "title: {0}\ndescription: [insert description]\n" \
         "state: unstarted\n"
-    task_ = task.from_string(_get_input_from_editor(task_template.format(slug)))
+    task_ = task.from_string(_get_input_from_editor(
+        task_template.format(slug)))
     task.add(slug, task_)
 
 
@@ -27,6 +31,27 @@ def edit(args):
     slug = args.slug
     task_ = task.from_string(_get_input_from_editor(task.source(slug)))
     task.update(slug, task_)
+
+
+def list_(args):
+    states = args.states
+    finished = args.finished
+    format_ = args.format
+
+    if states and finished:
+        states.append('finished')
+
+    def _filter(task_):
+        if states and task_['state'] in states:
+            return task_
+        elif not states and finished:
+            return task_
+        elif not states and task_['state'] != 'finished':
+            return task_
+    tasks = filter(_filter, task.all())
+
+    for task_ in tasks:
+        _display_task(task_, format_=format_)
 
 
 def finish(args):
@@ -48,6 +73,16 @@ def _get_input_from_editor(default=None):
         subprocess.call([editor, temp_file.name])
     with file(temp_file.name) as f:
         return f.read()
+
+
+def _display_task(task_, format_='short'):
+    colors = dict(finished=red, unstarted=yellow)
+    state = colors.get(task_['state'], green)(task_['state'])
+
+    puts('[{0}] {1} ({2})'.format(state, task_['title'], task_.slug))
+    if format_ == 'long':
+        with indent():
+            puts(columns(list((task_['description'], 72))))
 
 
 def main():
@@ -90,6 +125,18 @@ def main():
         description='Finish a task in the current clask project.')
     finish_parser.add_argument('slug', help='slug of the task to move')
     finish_parser.set_defaults(func=finish)
+
+    list_parser = subparsers.add_parser('list',
+        help='List tasks in the current clask project',
+        description='List tasks in the current clask project.')
+    list_parser.add_argument('--states', metavar='STATE', nargs='+',
+        help='set of states to list')
+    list_parser.add_argument('--finished', action='store_true',
+        help='include tasks that have been finished')
+    list_parser.add_argument('--format', choices=['long', 'short'],
+        default='short',
+        help='format to display listed tasks (defualt: short)')
+    list_parser.set_defaults(func=list_)
 
     args = parser.parse_args()
     args.func(args)

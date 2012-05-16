@@ -7,6 +7,17 @@ except ImportError:
 from clask import repo
 
 
+class Task(dict):
+    def __init__(self, slug, task_dict):
+        self.slug = slug
+        super(Task, self).__init__(task_dict)
+
+
+def all():
+    for slug in repo.all():
+        yield load(slug)
+
+
 def add(slug, task):
     repo.put(slug, dump(task), 'Create task: {0}'.format(slug))
 
@@ -25,7 +36,8 @@ def update(slug, task):
 
 
 def load(slug):
-    return from_string(repo.get(slug))
+    task = Task(slug, from_string(repo.get(slug)))
+    return task
 
 
 def source(slug):

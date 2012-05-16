@@ -1,7 +1,7 @@
+import os
 from time import time
 
 from dulwich.repo import Repo
-from dulwich.config import StackedConfig
 from dulwich.objects import Blob, Tree, Commit
 
 
@@ -20,6 +20,11 @@ def get(slug):
     return _get_blob(slug).data
 
 
+def all():
+    tree = _get_current_tree()
+    return list(set(map(_slug, tree)) - set(['gitkeep']))
+
+
 def put(slug, data, message=None, finish=False):
     tree_dict = dict()
     if finish:
@@ -32,12 +37,8 @@ def put(slug, data, message=None, finish=False):
 
 
 def _commit(tree_dict, message):
-    try:
-        head = _get_repo_object(_get_clask_head())
-        tree = _get_repo_object(head.tree)
-    except KeyError:
-        head = None
-        tree = Tree()
+    head = _get_current_head()
+    tree = _get_current_tree()
 
     for name, contents in tree_dict.items():
         if contents is None:
@@ -63,24 +64,40 @@ def _commit(tree_dict, message):
     _repo['refs/heads/clask'] = commit.id
 
 
-def _get_clask_head():
-    return _repo.refs['refs/heads/clask']
-
-
 def _get_repo_object(id):
     return _repo[id]
 
 
 def _get_blob(slug):
-    tree_entry = _tree_entry(slug)
-    head = _get_repo_object(_get_clask_head())
-    tree = _get_repo_object(head.tree)
-    try:
-        _, sha = tree[tree_entry]
-    except KeyError:
-        tree_entry = _tree_entry(slug, finished=True)
-        _, sha = tree[tree_entry]
+    tree_entry = _current_tree_entry(slug)
+    tree = _get_current_tree()
+    _, sha = tree[tree_entry]
+
     return _get_repo_object(sha)
+
+
+def _get_current_tree():
+    try:
+        head = _get_current_head()
+        tree = _get_repo_object(head.tree)
+    except KeyError:
+        head = None
+        tree = Tree()
+
+    return tree
+
+
+def _get_current_head():
+    sha = _repo.refs['refs/heads/clask']
+    return _repo[sha]
+
+
+def _current_tree_entry(slug):
+    tree = _get_current_tree()
+    finished = _tree_entry(slug, True)
+    if finished in tree:
+        return finished
+    return _tree_entry(slug)
 
 
 def _tree_entry(slug, finished=False):
@@ -88,4 +105,8 @@ def _tree_entry(slug, finished=False):
     return template.format(slug)
 
 
-    return _get_repo_object(sha)
+def _slug(tree_entry):
+    slug, ext = os.path.splitext(tree_entry)
+    if slug.startswith('.'):
+        slug = slug[1:]
+    return slug
