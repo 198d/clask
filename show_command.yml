@@ -1,4 +1,8 @@
-description: Add show command which allows for viewing of individual tasks in various
-  ways.
-state: unstarted
-title: Show Command
+!!python/object/new:clask.task.Task
+dictitems:
+  description: Add show command which allows for viewing of individual tasks in various
+    ways.
+  state: started
+  title: Show Command
+state:
+  slug: show_command
