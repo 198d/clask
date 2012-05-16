@@ -168,3 +168,21 @@ The ```--states``` option allows filtering the list by a set of
 states. By default, finished tasks are not displayed. The
 ```--finished``` option will include those tasks. To see only finished
 tasks, use the ```---states``` option.
+
+### Viewing individual tasks
+
+```
+usage: clask show [-h] slug
+
+Show the details of a task in the current clask project.
+
+positional arguments:
+  slug        slug of the task to show
+
+optional arguments:
+  -h, --help  show this help message and exit
+```
+
+This will show the details of the task specified by ```slug``` in the
+same way the ```list``` command shows tasks when run with
+```--format=long```.

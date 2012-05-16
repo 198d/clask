@@ -54,6 +54,11 @@ def list_(args):
         _display_task(task_, format_=format_)
 
 
+def show(args):
+    task_ = task.load(args.slug)
+    _display_task(task_, format_='long')
+
+
 def finish(args):
     args.state = 'finished'
     move(args, finish=True)
@@ -137,6 +142,13 @@ def main():
         default='short',
         help='format to display listed tasks (defualt: short)')
     list_parser.set_defaults(func=list_)
+
+    show_parser = subparsers.add_parser('show',
+        help='Show the details of a task in the current clask project',
+        description='Show the details of a task in the current clask project.')
+    show_parser.add_argument('slug', help='slug of the task to show')
+    show_parser.set_defaults(func=show)
+
 
     args = parser.parse_args()
     args.func(args)
