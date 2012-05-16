@@ -1,0 +1,8 @@
+!!python/object/new:clask.task.Task
+dictitems:
+  description: Update the README to use include the help text for each command and
+    update descriptions to provide supplimentary information.
+  state: finished
+  title: Use Command Help in README
+state:
+  slug: command_help_readme
