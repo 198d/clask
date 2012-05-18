@@ -49,4 +49,4 @@ def from_string(task):
 
 
 def dump(task):
-    return yaml.dump(task, Dumper=Dumper, default_flow_style=False)
+    return yaml.dump(dict(task), Dumper=Dumper, default_flow_style=False)
