@@ -1,4 +1,4 @@
 description: Update the list command to take the argument --all in place of the argument
   --finished for specifying the desire to list even finished tasks.
-state: unstarted
+state: started
 title: Rename --finished to --all
