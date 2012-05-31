@@ -1,4 +1,4 @@
 description: The slug currently is only stored as the name of the tree entry, it'd
   make more sense to store it with the YAML, also.
-state: unstarted
+state: started
 title: Include slug in YAML
