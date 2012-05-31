@@ -35,7 +35,7 @@ def edit(args):
 
 def list_(args):
     states = args.states
-    finished = args.finished
+    all_ = args.all
     format_ = args.format
 
     if states and finished:
@@ -44,7 +44,7 @@ def list_(args):
     def _filter(task_):
         if states and task_['state'] in states:
             return task_
-        elif not states and finished:
+        elif not states and all_:
             return task_
         elif not states and task_['state'] != 'finished':
             return task_
@@ -136,7 +136,7 @@ def main():
         description='List tasks in the current clask project.')
     list_parser.add_argument('--states', metavar='STATE', nargs='+',
         help='set of states to list')
-    list_parser.add_argument('--finished', action='store_true',
+    list_parser.add_argument('--all', action='store_true',
         help='include tasks that have been finished')
     list_parser.add_argument('--format', choices=['long', 'short'],
         default='short',
