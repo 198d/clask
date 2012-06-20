@@ -1,3 +1,4 @@
 description: Add start command which moves the task to the started state.
+slug: start_command
 state: finished
 title: Start Command
