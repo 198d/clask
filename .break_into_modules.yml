@@ -1,4 +1,5 @@
 description: clask/__init__.py needs to be broken down into modules leaving, probably,
   only the main function behind.
+slug: break_into_modules
 state: finished
 title: Break clask/__init__.py into Modules
