@@ -77,19 +77,21 @@ def _get_blob(slug):
 
 
 def _get_current_tree():
-    try:
-        head = _get_current_head()
+    head = _get_current_head()
+    if head is not None:
         tree = _get_repo_object(head.tree)
-    except KeyError:
-        head = None
+    else:
         tree = Tree()
 
     return tree
 
 
 def _get_current_head():
-    sha = _repo.refs['refs/heads/clask']
-    return _repo[sha]
+    try:
+        sha = _repo.refs['refs/heads/clask']
+        return _repo[sha]
+    except KeyError:
+        return None
 
 
 def _current_tree_entry(slug):
