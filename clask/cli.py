@@ -15,10 +15,11 @@ def init(args):
 
 def add(args):
     slug = args.slug
-    task_template = "title: {0}\ndescription: [insert description]\n" \
+    task_template = "slug: {0}\ntitle: {0}\ndescription: [insert description]\n" \
         "state: unstarted\n"
     task_ = task.from_string(_get_input_from_editor(
         task_template.format(slug)))
+
     task.add(slug, task_)
 
 
@@ -84,7 +85,7 @@ def _display_task(task_, format_='short'):
     colors = dict(finished=red, unstarted=yellow)
     state = colors.get(task_['state'], green)(task_['state'])
 
-    puts('[{0}] {1} ({2})'.format(state, task_['title'], task_.slug))
+    puts('[{0}] {1} ({2})'.format(state, task_['title'], task_['slug']))
     if format_ == 'long':
         with indent():
             puts(columns(list((task_['description'], 72))))

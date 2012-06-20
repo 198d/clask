@@ -8,9 +8,7 @@ from clask import repo
 
 
 class Task(dict):
-    def __init__(self, slug, task_dict):
-        self.slug = slug
-        super(Task, self).__init__(task_dict)
+    pass
 
 
 def all():
@@ -36,7 +34,7 @@ def update(slug, task):
 
 
 def load(slug):
-    task = Task(slug, from_string(repo.get(slug)))
+    task = Task(from_string(repo.get(slug)))
     return task
 
 
