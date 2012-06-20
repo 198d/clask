@@ -1,3 +1,4 @@
 description: Options parsing should handle subcommands and their options better.
+slug: better_options_parsing
 state: finished
 title: Better Options Parsing
