@@ -1,4 +1,5 @@
 description: Update the README to use include the help text for each command and update
   descriptions to provide supplimentary information.
+slug: command_help_readme
 state: finished
 title: Use Command Help in README
