@@ -1,3 +1,4 @@
 description: Accept an optional state for the finish command.
+slug: optional_state_for_finish_command
 state: unstarted
 title: Accept a state when finishing
