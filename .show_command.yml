@@ -1,4 +1,5 @@
 description: Add show command which allows for viewing of individual tasks in various
   ways.
+slug: show_command
 state: finished
 title: Show Command
