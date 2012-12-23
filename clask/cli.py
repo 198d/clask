@@ -49,7 +49,7 @@ def list_(args):
             return task_
         elif not states and task_['state'] != 'finished':
             return task_
-    tasks = filter(_filter, task.all())
+    tasks = list(filter(_filter, task.all()))
 
     for task_ in tasks:
         _display_task(task_, format_=format_)

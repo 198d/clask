@@ -40,13 +40,13 @@ def _commit(tree_dict, message):
     head = _get_current_head()
     tree = _get_current_tree()
 
-    for name, contents in tree_dict.items():
+    for name, contents in list(tree_dict.items()):
         if contents is None:
             del tree[name]
         else:
             blob = Blob.from_string(contents)
             _repo.object_store.add_object(blob)
-            tree[name] = (0100644, blob.id)
+            tree[name] = (0o100644, blob.id)
 
     commit = Commit()
     commit.parents = [head.id] if head else []
